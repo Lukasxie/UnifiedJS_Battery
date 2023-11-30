@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Production Chart</title>
+  <script src="Chart.bundle.js"></script>
+  <style>
+    #container {
+      display: flex;
+    }
+
+    #chartContainer {
+      width: 500px;
+      height: 500px;
+    }
+
+    #inputs {
+      margin-left: 20px;
+    }
+
+    input {
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div id="chartContainer">
+      <canvas id="productionChart"></canvas>
+    </div>
+    <div id="inputs">
+      <input type="number" id="mondayInput" placeholder="Monday" oninput="updateChart()">
+      <input type="number" id="tuesdayInput" placeholder="Tuesday" oninput="updateChart()">
+      <input type="number" id="wednesdayInput" placeholder="Wednesday" oninput="updateChart()">
+      <input type="number" id="thursdayInput" placeholder="Thursday" oninput="updateChart()">
+      <input type="number" id="fridayInput" placeholder="Friday" oninput="updateChart()">
+      <input type="number" id="saturdayInput" placeholder="Saturday" oninput="updateChart()">
+      <input type="number" id="sundayInput" placeholder="Sunday" oninput="updateChart()">
+    </div>
+  </div>
+
+  <script>
+    let dailyProduction = [0, 0, 0, 0, 0, 0, 0];
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderChart();
+    });
+
+    function renderChart() {
+      const ctx = document.getElementById('productionChart').getContext('2d');
+
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          datasets: [{
+            label: 'Daily Production',
+            data: dailyProduction,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          }],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+
+    function updateChart() {
+      const inputs = document.querySelectorAll('input[type="number"]');
+      dailyProduction = Array.from(inputs).map(input => parseInt(input.value) || 0);
+
+      // 获取现有的图表对象1
+      const chart = Chart.getChart('productionChart');
+
+      // 更新图表数据
+      chart.data.datasets[0].data = dailyProduction;
+
+      // 重新渲染图表
+      chart.update();
+    }
+  </script>
+</body>
+
+</html>
